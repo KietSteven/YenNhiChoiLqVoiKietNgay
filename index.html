@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Chơi LQ mà cũng đợi nhắc 😒</title>
+  <style>
+    body {
+      font-family: "Arial", sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #ffe6e6;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    h1 {
+      color: #e60073;
+      text-align: center;
+    }
+
+    #buttons {
+      margin-top: 30px;
+      position: relative;
+      height: 100px;
+    }
+
+    button {
+      font-size: 18px;
+      padding: 10px 20px;
+      margin: 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    #yesBtn {
+      background-color: #ff66a3;
+      color: white;
+    }
+
+    #noBtn {
+      background-color: #ccc;
+      color: black;
+      position: absolute;
+    }
+
+    #result {
+      margin-top: 40px;
+      font-size: 22px;
+      color: #d1006c;
+    }
+
+#crushImage {
+  display: none;
+  margin-top: 20px;
+  width: 20%;
+  height: auto;
+  border: 6px solid white;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.heart {
+  position: fixed;
+  font-size: 20px;
+  color: #ff4d88;
+  animation: fly 1s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes fly {
+  0% {
+    opacity: 1;
+    transform: scale(1) translate(0, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.5) translate(var(--x), var(--y));
+  }
+}
+
+  </style>
+</head>
+<body>
+
+  <h1 id="question">Yến Nhi chơi liên quân với mình khôngg? 😎</h1>
+
+  <div id="buttons">
+    <button id="yesBtn">Có 💖</button>
+    <button id="noBtn">Không 🙅</button>
+  </div>
+
+  <div id="result"></div>
+
+  <img id="crushImage" src="Yn_khung.jpg" alt="Yn cute">
+
+  <div id="heart-container"></div>
+
+  <script>
+    const noBtn = document.getElementById('noBtn');
+    const yesBtn = document.getElementById('yesBtn');
+    const result = document.getElementById('result');
+    const crushImage = document.getElementById('crushImage');
+
+    // Di chuyển nút "Không" khi trỏ chuột đến gần
+noBtn.addEventListener('mousedown', (e) => {
+  e.preventDefault(); // Ngăn không cho nhấn thành công
+
+  const offsetX = (Math.random() - 0.5) * 800;
+  const offsetY = (Math.random() - 0.5) * 600;
+
+  const rect = noBtn.getBoundingClientRect();
+
+  let newLeft = rect.left + offsetX;
+  let newTop = rect.top + offsetY;
+
+  // Giới hạn trong khung màn hình
+  const maxWidth = window.innerWidth - rect.width;
+  const maxHeight = window.innerHeight - rect.height;
+
+  newLeft = Math.max(0, Math.min(maxWidth, newLeft));
+  newTop = Math.max(0, Math.min(maxHeight, newTop));
+
+  noBtn.style.position = "fixed";
+  noBtn.style.left = `${newLeft}px`;
+  noBtn.style.top = `${newTop}px`;
+});
+
+  // Khi nhấn "Có"
+  yesBtn.addEventListener('click', (e) => {
+  document.getElementById("question").style.display = "none";
+  result.innerHTML = "<strong>Nhanh cái tay lên, Kiệt đợi nãy giờ 😉</strong>";
+  noBtn.style.display = 'none';
+  yesBtn.style.display = 'none';
+  crushImage.style.display = 'block';
+
+  // 💥 Bắn trái tim
+  const x = e.clientX;
+  const y = e.clientY;
+  createHeartBurst(x, y);
+});
+
+function createHeartBurst(x, y) {
+  for (let i = 0; i < 20; i++) {
+    const heart = document.createElement('div');
+    heart.classList.add('heart');
+    heart.innerText = '💖';
+
+    // Vị trí bắt đầu
+    heart.style.left = `${x}px`;
+    heart.style.top = `${y}px`;
+
+    // Random hướng bay
+    const xOffset = (Math.random() - 0.5) * 300 + 'px';
+    const yOffset = (Math.random() - 0.5) * 300 + 'px';
+    heart.style.setProperty('--x', xOffset);
+    heart.style.setProperty('--y', yOffset);
+
+    document.getElementById('heart-container').appendChild(heart);
+
+    // Xóa sau 1s
+    setTimeout(() => heart.remove(), 1000);
+  }
+}
+  </script>
+
+</body>
+</html>
